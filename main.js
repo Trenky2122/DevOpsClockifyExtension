@@ -33,7 +33,7 @@ const getTicketFullTextFromTile = (tile)=>{
 }
 
 const setErrorMessage = (message)=>{
-    document.querySelectorAll(".hub-title").forEach(item=>{
+    document.querySelectorAll("#__bolt-suite-logo").forEach(item=>{
         item.innerHTML="<span style='color: red'>" + message + "</span>"
     });
 }
