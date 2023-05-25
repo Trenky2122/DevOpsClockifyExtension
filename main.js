@@ -25,11 +25,16 @@ const extractTicketNumberFromTileId = (itemId)=>{
 
 const getTicketFullTextFromTile = (tile)=>{
     let ticketId = extractTicketNumberFromTileId(tile.id);
+    let tileText = getTicketTextFromTile(tile)
+    return ticketId +": "+ tileText;
+}
+
+const getTicketTextFromTile = (tile) => {
     let tileText = tile.firstChild.firstChild.children[2].firstChild.firstChild.innerHTML;
     if(!tileText)
-        tileText = tile.firstChild.firstChild.children[2].firstChild.innerHTML; 
+        tileText = tile.firstChild.firstChild.children[2].firstChild.innerHTML;
         //for some reason, ticket text is not a link until you hover cursor over it
-    return ticketId +": "+ tileText;
+    return tileText;
 }
 
 const setErrorMessage = (message)=>{
@@ -205,14 +210,14 @@ function copyToClipboard(textToCopy) {
 }
 
 const copyTicketCheckInMessage = async (item)=>{
-    let message = getTicketFullTextFromTile(item);
+    let message = '#' + getTicketFullTextFromTile(item);
     await copyToClipboard(message);
     console.log("Copied");
 }
 
-const copyTicketId = async (item)=>{
-    let tickeId = extractTicketNumberFromTileId(item.id);
-    await copyToClipboard(tickeId);
+const copyImplementationTextVersion = async (item)=>{
+    let text = 'Implementácia: ' + getTicketTextFromTile(item);
+    await copyToClipboard(text);
     console.log("Copied");
 }
 
@@ -242,7 +247,7 @@ chrome.storage.sync.get("clockifyApiKey").then(async keyStorageItem=>{
             event.preventDefault();
             if(event.ctrlKey){
                 if(event.altKey){
-                    await copyTicketId(item);
+                    await copyImplementationTextVersion(item);
                 }else {
                     await copyTicketCheckInMessage(item);
                 }
